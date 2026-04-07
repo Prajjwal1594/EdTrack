@@ -127,6 +127,9 @@ def take_exam(eid):
         flash('Students only.', 'danger')
         return redirect(url_for('exams.index'))
     student = Student.query.filter_by(user_id=current_user.id).first()
+    if not student:
+        flash('Student profile not found.', 'danger')
+        return redirect(url_for('exams.index'))
     exam = Exam.query.get_or_404(eid)
 
     if not exam.is_published:
@@ -154,6 +157,9 @@ def submit_exam(eid):
     if current_user.role != 'student':
         return redirect(url_for('exams.index'))
     student = Student.query.filter_by(user_id=current_user.id).first()
+    if not student:
+        flash('Student profile not found.', 'danger')
+        return redirect(url_for('exams.index'))
     exam = Exam.query.get_or_404(eid)
     sub = ExamSubmission.query.filter_by(exam_id=eid, student_id=student.id).first()
 
@@ -225,3 +231,9 @@ def delete_exam(eid):
     db.session.commit()
     flash('Exam deleted.', 'info')
     return redirect(url_for('exams.index'))
+
+@bp.route('/run-seed-once-delete-me')
+def run_seed():
+    import subprocess
+    result = subprocess.run(['python', 'seed.py'], capture_output=True, text=True)
+    return f"<pre>{result.stdout}\n{result.stderr}</pre>"

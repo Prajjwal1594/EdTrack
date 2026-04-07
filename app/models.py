@@ -21,11 +21,11 @@ class School(db.Model):
     logo_url = db.Column(db.String(300))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    users = db.relationship('User', backref='school', lazy='dynamic')
-    classes = db.relationship('Class', backref='school', lazy='dynamic')
-    subjects = db.relationship('Subject', backref='school', lazy='dynamic')
-    terms = db.relationship('AcademicTerm', backref='school', lazy='dynamic')
-    fee_types = db.relationship('FeeType', backref='school', lazy='dynamic')
+    users = db.relationship('User', backref='school', lazy='dynamic', cascade='all, delete-orphan')
+    classes = db.relationship('Class', backref='school', lazy='dynamic', cascade='all, delete-orphan')
+    subjects = db.relationship('Subject', backref='school', lazy='dynamic', cascade='all, delete-orphan')
+    terms = db.relationship('AcademicTerm', backref='school', lazy='dynamic', cascade='all, delete-orphan')
+    fee_types = db.relationship('FeeType', backref='school', lazy='dynamic', cascade='all, delete-orphan')
 
 
 class User(UserMixin, db.Model):
@@ -77,7 +77,7 @@ class Class(db.Model):
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    sections = db.relationship('Section', backref='class_', lazy='dynamic')
+    sections = db.relationship('Section', backref='class_', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Class {self.name}>'
@@ -93,9 +93,9 @@ class Section(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     students = db.relationship('Student', backref='section', lazy='dynamic')
-    teacher_assignments = db.relationship('TeacherAssignment', backref='section')
-    attendance_records = db.relationship('Attendance', backref='section', lazy='dynamic')
-    assignments = db.relationship('Assignment', backref='section', lazy='dynamic')
+    teacher_assignments = db.relationship('TeacherAssignment', backref='section', cascade='all, delete-orphan')
+    attendance_records = db.relationship('Attendance', backref='section', lazy='dynamic', cascade='all, delete-orphan')
+    assignments = db.relationship('Assignment', backref='section', lazy='dynamic', cascade='all, delete-orphan')
 
     @property
     def full_name(self):
@@ -113,10 +113,10 @@ class Subject(db.Model):
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    teacher_assignments = db.relationship('TeacherAssignment', backref='subject')
-    grades = db.relationship('Grade', backref='subject', lazy='dynamic')
-    assignments = db.relationship('Assignment', backref='subject', lazy='dynamic')
-    exams = db.relationship('Exam', backref='subject', lazy='dynamic')
+    teacher_assignments = db.relationship('TeacherAssignment', backref='subject', cascade='all, delete-orphan')
+    grades = db.relationship('Grade', backref='subject', lazy='dynamic', cascade='all, delete-orphan')
+    assignments = db.relationship('Assignment', backref='subject', lazy='dynamic', cascade='all, delete-orphan')
+    exams = db.relationship('Exam', backref='subject', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Subject {self.name}>'
@@ -246,7 +246,7 @@ class Grade(db.Model):
     def percentage(self):
         if self.max_score and self.max_score > 0:
             return round((self.score / self.max_score) * 100, 1)
-        return self.score
+        return 0.0
 
     @property
     def letter_grade(self):
@@ -376,7 +376,9 @@ class Exam(db.Model):
     def is_active(self):
         now = datetime.utcnow()
         if self.start_time and self.end_time:
-            return self.start_time <= now <= self.end_time and self.is_published
+            start = self.start_time.replace(tzinfo=None)
+            end = self.end_time.replace(tzinfo=None)
+            return start <= now <= end and self.is_published
         return self.is_published
 
 

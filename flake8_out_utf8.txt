@@ -1,0 +1,129 @@
+app/admin\__init__.py:5:1: F401 'app.admin.routes' imported but unused
+from app.admin import routes
+^
+app/admin\routes.py:1:1: F401 'flask.jsonify' imported but unused
+from flask import render_template, redirect, url_for, flash, request, jsonify, Response
+^
+app/admin\routes.py:10:1: F401 'werkzeug.security.generate_password_hash' imported but unused
+from werkzeug.security import generate_password_hash
+^
+app/ai\__init__.py:1:1: F401 'app.ai.routes.bp' imported but unused
+from app.ai.routes import bp
+^
+app/ai\routes.py:1:1: F401 'flask.abort' imported but unused
+from flask import Blueprint, jsonify, request, abort
+^
+app/ai\routes.py:6:1: F401 'app.models.db' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/ai\routes.py:6:1: F401 'app.models.Attendance' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/ai\routes.py:6:1: F401 'app.models.MicroCredential' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/ai\routes.py:6:1: F401 'app.models.School' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/ai\routes.py:6:1: F401 'app.models.Section' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/ai\routes.py:6:1: F401 'app.models.Subject' imported but unused
+from app.models import db, Student, Grade, Attendance, SoftSkillMetric, MicroCredential, ParentStudentLink, User, School, Class, Section, Subject
+^
+app/auth\__init__.py:5:1: F401 'app.auth.routes' imported but unused
+from app.auth import routes
+^
+app/exams\__init__.py:3:1: F401 'app.exams.routes' imported but unused
+from app.exams import routes
+^
+app/exams\routes.py:1:1: F401 'flask.jsonify' imported but unused
+from flask import render_template, redirect, url_for, flash, request, jsonify
+^
+app/exams\routes.py:9:1: F401 'json' imported but unused
+import json
+^
+app/fees\__init__.py:3:1: F401 'app.fees.routes' imported but unused
+from app.fees import routes
+^
+app/messages\__init__.py:3:1: F401 'app.messages.routes' imported but unused
+from app.messages import routes
+^
+app/messages\routes.py:7:1: F401 'sqlalchemy.or_' imported but unused
+from sqlalchemy import or_
+^
+app/parent\__init__.py:3:1: F401 'app.parent.routes' imported but unused
+from app.parent import routes
+^
+app/parent\routes.py:5:1: F401 'app.models.Assignment' imported but unused
+from app.models import (ParentStudentLink, Student, Grade, Attendance,
+^
+app/parent\routes.py:5:1: F401 'app.models.AssignmentSubmission' imported but unused
+from app.models import (ParentStudentLink, Student, Grade, Attendance,
+^
+app/reports\__init__.py:3:1: F401 'app.reports.routes' imported but unused
+from app.reports import routes
+^
+app/reports\routes.py:4:1: F401 'app.models.Subject' imported but unused
+from app.models import (Student, Grade, Attendance, AcademicTerm, ReportComment,
+^
+app/reports\routes.py:6:1: F401 'app.db' imported but unused
+from app import db
+^
+app/student\__init__.py:3:1: F401 'app.student.routes' imported but unused
+from app.student import routes
+^
+app/student\routes.py:5:1: F401 'app.models.ExamSubmission' imported but unused
+from app.models import (Student, Grade, Attendance, Assignment, AssignmentSubmission,
+^
+app/student\routes.py:5:1: F401 'app.models.ExamQuestion' imported but unused
+from app.models import (Student, Grade, Attendance, Assignment, AssignmentSubmission,
+^
+app/student\routes.py:9:1: F401 'json' imported but unused
+import json
+^
+app/superadmin\routes.py:5:1: F401 'app.models.Section' imported but unused
+from app.models import School, User, Class, Section, Subject, AcademicTerm, Student, Grade, Attendance
+^
+app/superadmin\routes.py:5:1: F401 'app.models.Attendance' imported but unused
+from app.models import School, User, Class, Section, Subject, AcademicTerm, Student, Grade, Attendance
+^
+app/superadmin\routes.py:7:1: F401 'datetime.datetime' imported but unused
+from datetime import datetime
+^
+app/superadmin\routes.py:8:1: F401 'sqlalchemy.func' imported but unused
+from sqlalchemy import func
+^
+app/teacher\__init__.py:3:1: F401 'app.teacher.routes' imported but unused
+from app.teacher import routes
+^
+app/teacher\routes.py:1:1: F401 'flask.jsonify' imported but unused
+from flask import render_template, redirect, url_for, flash, request, jsonify
+^
+app/teacher\routes.py:5:1: F401 'app.models.Exam' imported but unused
+from app.models import (User, TeacherAssignment, Student, Grade, Attendance,
+^
+app/teacher\routes.py:5:1: F401 'app.models.ExamQuestion' imported but unused
+from app.models import (User, TeacherAssignment, Student, Grade, Attendance,
+^
+app/teacher\routes.py:12:1: F401 'app.utils.realtime.broadcast_notification' imported but unused
+from app.utils.realtime import broadcast_student_update, broadcast_notification
+^
+app/teacher\routes.py:14:1: F401 'json' imported but unused
+import json
+^
+app/timetable\__init__.py:5:1: F401 'app.timetable.routes' imported but unused
+from app.timetable import routes
+^
+app/timetable\routes.py:4:1: F401 'app.models.School' imported but unused
+from app.models import db, TimetableSlot, Section, Subject, User, School, Class
+^
+app/timetable\routes.py:5:1: F401 'datetime.time' imported but unused
+from datetime import datetime, time
+^
+app/utils\algorithms.py:1:1: F401 'app.models.ParentStudentLink' imported but unused
+from app.models import Student, Attendance, Grade, ParentStudentLink, User, FeePayment
+^
+app/utils\algorithms.py:1:1: F401 'app.models.FeePayment' imported but unused
+from app.models import Student, Attendance, Grade, ParentStudentLink, User, FeePayment
+^

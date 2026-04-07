@@ -41,11 +41,23 @@ def dashboard():
     sections = get_teacher_sections()
     today = date.today()
 
-    # Today's attendance status for each section
+    # Today's attendance status and stats
     attendance_done = {}
+    attendance_stats = {}
+    total_present_today = 0
+    total_expected_today = sum(s.students.count() for s in sections)
+
     for s in sections:
-        count = Attendance.query.filter_by(section_id=s.id, date=today).count()
-        attendance_done[s.id] = count > 0
+        records = Attendance.query.filter_by(section_id=s.id, date=today).all()
+        attendance_done[s.id] = len(records) > 0
+        section_students = s.students.count()
+        
+        if len(records) > 0:
+            present = sum(1 for r in records if r.status in ('present', 'late'))
+            attendance_stats[s.id] = {'present': present, 'total': section_students}
+            total_present_today += present
+        else:
+            attendance_stats[s.id] = {'present': 0, 'total': section_students}
 
     # Pending assignments
     pending_grading = (AssignmentSubmission.query
@@ -102,6 +114,9 @@ def dashboard():
     return render_template('teacher/dashboard.html',
                            assignments=assignments, sections=sections,
                            attendance_done=attendance_done,
+                           attendance_stats=attendance_stats,
+                           total_present_today=total_present_today,
+                           total_expected_today=total_expected_today,
                            pending_grading=pending_grading,
                            recent_grades=recent_grades,
                            active_term=active_term,

@@ -19,10 +19,10 @@
   </div>
 </div>
 
-  <div class="stat-card">
+  <div class="stat-card" title="Sections Completed: {{ attendance_done.values() | select('equalto', True) | list | length }}/{{ sections | length }}">
     <div class="stat-icon gold"><i class="fas fa-check-circle"></i></div>
-    <div class="stat-value">{{ attendance_done.values() | selectattr('__bool__') | list | length }}/{{ sections | length }}</div>
-    <div class="stat-label">Attendance Today</div>
+    <div class="stat-value">{{ total_present_today }}/{{ total_expected_today }}</div>
+    <div class="stat-label">Students Present Today</div>
   </div>
 </div>
 
@@ -70,7 +70,7 @@
             <td>{{ s.students.count() }}</td>
             <td>
               {% if attendance_done.get(s.id) %}
-                <span class="badge badge-success"><i class="fas fa-check"></i> Done</span>
+                <span class="badge badge-success" title="Attendance marked"><i class="fas fa-check"></i> {{ attendance_stats[s.id]['present'] }}/{{ attendance_stats[s.id]['total'] }} Present</span>
               {% else %}
                 <span class="badge badge-warning">Pending</span>
               {% endif %}

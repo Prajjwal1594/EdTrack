@@ -43,9 +43,10 @@ def report_card(student_id):
     term_id = request.args.get('term_id', active_term.id if active_term else None, type=int)
     selected_term = AcademicTerm.query.get(term_id) if term_id else active_term
 
-    grades = []
+    grades = Grade.query.filter_by(student_id=student_id)
     if term_id:
-        grades = Grade.query.filter_by(student_id=student_id, term_id=term_id).all()
+        grades = grades.filter_by(term_id=term_id)
+    grades = grades.all()
 
     # Group by subject and compute averages
     subject_summaries = {}
