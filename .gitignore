@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+elwood.zip
+instance/
+.pytest_cache/
+.DS_Store

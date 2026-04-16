@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
+ 
+[deploy]
+startCommand = "gunicorn --worker-class gevent -w 1 'app:create_app()' --bind 0.0.0.0:$PORT"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+ 
+[environments.production.variables]
+PYTHON_VERSION = "3.11"
