@@ -113,6 +113,8 @@ def create_app(config_class=Config):
             print("[STARTUP] Running db.create_all()...", flush=True)
             db.create_all()
             print("[STARTUP] db.create_all() completed successfully.", flush=True)
+            # CRITICAL: Dispose the engine so connections aren't shared across Gunicorn forks!
+            db.engine.dispose()
         except Exception as e:
             print(f"[STARTUP] ERROR during db.create_all(): {e}", flush=True)
             traceback.print_exc()
