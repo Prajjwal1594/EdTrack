@@ -113,6 +113,13 @@ def create_app(config_class=Config):
             print("[STARTUP] Running db.create_all()...", flush=True)
             db.create_all()
             print("[STARTUP] db.create_all() completed successfully.", flush=True)
+            
+            from app.models import User
+            if not User.query.first():
+                print("[STARTUP] Database is completely empty. Running auto-seed...", flush=True)
+                from seed import seed
+                seed(app, auto=True)
+
             # CRITICAL: Dispose the engine so connections aren't shared across Gunicorn forks!
             db.engine.dispose()
         except Exception as e:

@@ -100,13 +100,16 @@ def seed_school_data(school, admin, teachers, term_offset_months=0):
 
 # ── Main seed function ─────────────────────────────────────────────────────────
 
-def seed():
-    app = create_app()
+def seed(app=None, auto=False):
+    if app is None:
+        app = create_app()
+    
     with app.app_context():
-        print("Dropping all tables...")
-        db.drop_all()
-        print("Creating tables...")
-        db.create_all()
+        if not auto:
+            print("Dropping all tables...")
+            db.drop_all()
+            print("Creating tables...")
+            db.create_all()
 
         # ══════════════════════════════════════════════════════════════════════
         # SUPER ADMIN  (belongs to no school, school_id=None)
