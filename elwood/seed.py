@@ -350,6 +350,8 @@ def seed():
         print("  teacher2@sunrise.edu       / teacher123")
         print("  student2@sunrise.edu       / student123")
         print("=" * 56 + "\n")
+        db.session.commit()
+print("Seeding completed successfully!")
 
 
 if __name__ == "__main__":
