@@ -92,6 +92,10 @@ def create_app(config_class=Config):
     from app.finance import bp as finance_bp
     app.register_blueprint(finance_bp, url_prefix='/finance')
 
+    @app.route('/health')
+    def health_check():
+        return jsonify({"status": "ok"}), 200
+
     @app.errorhandler(404)
     def not_found_error(error):
         print(f"DEBUG: 404 ERROR at {request.path} | Headers: {dict(request.headers)}")
