@@ -1,3 +1,5 @@
+import sys
+import traceback
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -11,15 +13,18 @@ mail = Mail()
 socketio = SocketIO()
 
 def create_app(config_class=Config):
+    print("[STARTUP] Creating Flask app...", flush=True)
     app = Flask(__name__,
                 template_folder='../templates',
                 static_folder='../static')
     app.config.from_object(config_class)
+    print(f"[STARTUP] DATABASE_URL set: {'DATABASE_URL' in app.config and bool(app.config.get('SQLALCHEMY_DATABASE_URI'))}", flush=True)
+    print(f"[STARTUP] DB URI prefix: {app.config.get('SQLALCHEMY_DATABASE_URI', '')[:20]}...", flush=True)
 
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
-    socketio.init_app(app, cors_allowed_origins="*", async_mode="gevent")
+    socketio.init_app(app, cors_allowed_origins="*")
 
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'info'
@@ -104,6 +109,13 @@ def create_app(config_class=Config):
         return render_template('errors/404.html'), 404
 
     with app.app_context():
-        db.create_all()
+        try:
+            print("[STARTUP] Running db.create_all()...", flush=True)
+            db.create_all()
+            print("[STARTUP] db.create_all() completed successfully.", flush=True)
+        except Exception as e:
+            print(f"[STARTUP] ERROR during db.create_all(): {e}", flush=True)
+            traceback.print_exc()
 
+    print("[STARTUP] App creation complete. Ready to serve requests.", flush=True)
     return app

@@ -15,6 +15,10 @@ class Config:
         _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
     SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'connect_args': {'connect_timeout': 10},
+        'pool_pre_ping': True,
+    }
 
     # Mail config
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
