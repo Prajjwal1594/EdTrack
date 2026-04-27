@@ -1,9 +1,9 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd elwood && pip install -r requirements.txt"
+buildCommand = "pip install -r requirements.txt"
 
 [deploy]
-startCommand = "cd elwood && gunicorn --worker-class gevent -w 1 'app:create_app()' --bind 0.0.0.0:$PORT"
+startCommand = "gunicorn --worker-class gevent -w 1 'app:create_app()' --bind 0.0.0.0:$PORT"
 healthcheckPath = "/"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
