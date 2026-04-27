@@ -18,7 +18,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'connect_args': {'connect_timeout': 10},
         'pool_pre_ping': True,
     }
 
