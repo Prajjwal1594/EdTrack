@@ -53,7 +53,7 @@ def dashboard():
         func.to_char(Grade.date, 'YYYY-MM'), func.avg(Grade.score)
     ).join(Student, Grade.student_id == Student.id).join(User, Student.user_id == User.id)\
     .filter(User.school_id == current_user.school_id).group_by(func.to_char(Grade.date, 'YYYY-MM'))\
-    .order_by(Grade.date.desc()).limit(6).all()
+    .order_by(func.to_char(Grade.date, 'YYYY-MM').desc()).limit(6).all()
     performance_trend = [{"month": row[0], "avg": round(row[1], 1)} for row in reversed(trend_data)]
 
     # 3. User Distribution
