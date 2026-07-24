@@ -8,17 +8,19 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'edtrack-secret-key-change-in-production'
 
-    # Railway Postgres uses 'postgres://' but SQLAlchemy 2.x requires 'postgresql://'
+    # Postgres connections (Neon/Railway/Render) use 'postgres://' or 'postgresql://'
+    # SQLAlchemy 2.x requires 'postgresql://' (uses psycopg2-binary by default)
     _db_url = os.environ.get('DATABASE_URL') or \
         f'sqlite:///{os.path.join(basedir, "instance", "elwood.db")}'
     if _db_url.startswith('postgres://'):
-        _db_url = _db_url.replace('postgres://', 'postgresql+pg8000://', 1)
-    elif _db_url.startswith('postgresql://') and not _db_url.startswith('postgresql+pg8000://'):
-        _db_url = _db_url.replace('postgresql://', 'postgresql+pg8000://', 1)
+        _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+
     SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_pre_ping': True,
+        'pool_recycle': 280,
+        'pool_timeout': 20,
     }
 
     # Mail config

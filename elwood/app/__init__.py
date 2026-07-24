@@ -101,18 +101,34 @@ def create_app(config_class=Config):
     def health_check():
         return jsonify({"status": "ok"}), 200
 
+    @app.route('/init-db')
+    def init_db_route():
+        """Helper endpoint to initialize database tables and seed demo data on demand."""
+        try:
+            db.create_all()
+            from app.models import User
+            if not User.query.first():
+                from seed import seed
+                seed(app, auto=True)
+                return jsonify({"status": "success", "message": "Database initialized and seeded successfully!"}), 200
+            return jsonify({"status": "success", "message": "Database tables already initialized and populated."}), 200
+        except Exception as e:
+            traceback.print_exc()
+            return jsonify({"status": "error", "message": str(e)}), 500
+
     @app.errorhandler(404)
     def not_found_error(error):
-        print(f"DEBUG: 404 ERROR at {request.path} | Headers: {dict(request.headers)}")
+        print(f"DEBUG: 404 ERROR at {request.path} | Headers: {dict(request.headers)}", flush=True)
         if request.path.startswith('/api/'):
             return jsonify({"error": "Resource not found", "path": request.path}), 404
         return render_template('errors/404.html'), 404
 
     @app.errorhandler(500)
     def internal_error(error):
-        print(f"DEBUG: 500 ERROR at {request.path} | Error: {error}")
+        print(f"DEBUG: 500 ERROR at {request.path} | Error: {error}", flush=True)
+        traceback.print_exc()
         if request.path.startswith('/api/'):
-            return jsonify({"error": "Internal server error"}), 500
+            return jsonify({"error": "Internal server error", "details": str(error)}), 500
         return render_template('errors/500.html'), 500
 
     with app.app_context():
@@ -120,13 +136,6 @@ def create_app(config_class=Config):
             print("[STARTUP] Running db.create_all()...", flush=True)
             db.create_all()
             print("[STARTUP] db.create_all() completed successfully.", flush=True)
-            
-            from app.models import User
-            if not User.query.first():
-                print("[STARTUP] Database is completely empty. Running auto-seed...", flush=True)
-                from seed import seed
-                seed(app, auto=True)
-
         except Exception as e:
             print(f"[STARTUP] ERROR during db.create_all(): {e}", flush=True)
             traceback.print_exc()
