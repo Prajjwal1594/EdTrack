@@ -24,7 +24,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
-    socketio.init_app(app, cors_allowed_origins="*")
+    socketio.init_app(app, cors_allowed_origins="*", async_mode='threading')
 
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'info'
@@ -108,6 +108,13 @@ def create_app(config_class=Config):
             return jsonify({"error": "Resource not found", "path": request.path}), 404
         return render_template('errors/404.html'), 404
 
+    @app.errorhandler(500)
+    def internal_error(error):
+        print(f"DEBUG: 500 ERROR at {request.path} | Error: {error}")
+        if request.path.startswith('/api/'):
+            return jsonify({"error": "Internal server error"}), 500
+        return render_template('errors/500.html'), 500
+
     with app.app_context():
         try:
             print("[STARTUP] Running db.create_all()...", flush=True)
@@ -120,8 +127,6 @@ def create_app(config_class=Config):
                 from seed import seed
                 seed(app, auto=True)
 
-            # CRITICAL: Dispose the engine so connections aren't shared across Gunicorn forks!
-            db.engine.dispose()
         except Exception as e:
             print(f"[STARTUP] ERROR during db.create_all(): {e}", flush=True)
             traceback.print_exc()

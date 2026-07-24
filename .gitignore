@@ -6,3 +6,5 @@ elwood.zip
 instance/
 .pytest_cache/
 .DS_Store
+.vercel/
+api/__pycache__/
